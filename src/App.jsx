@@ -1,51 +1,36 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
   const [data, setData] = useState([]);
 
-  // fetch("https://api.restful-api.dev/objects")
-  
   const callApi = async () => {
-    // await fetch("https://api.restful-api.dev/objects")
-    // .then(res=>console.log(res))
-    // .then(data=>setData(data))
-    // .catch(error=>console.log("ERROR",error))
-
-    const response = await fetch("https://api.restful-api.dev/objects")
+    const response = await fetch("https://fakestoreapi.com/products").then((data)=>data.json())
     console.log(response);
-    if (!response.ok) {
-      console.log("Couldn't connect");
-    }
-    const apiData = await response.json();
-    setData(apiData);
-    console.log(response);
-    console.log(data);
-    console.log(apiData);
+    setData(response);
   }
-  useEffect(callApi,[])
-  return (
-    <div>
-      <button onClick={callApi}>button</button>
-      <table>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Details</th>
-        </tr>
-        {data.map(item => (
-          <ol key={item.id}>
-            <li>{item.id}</li>
-            <li>{item.name}</li>
-            <li>
-            </li>
-          </ol>
-        ))}
-      </table>
+  useEffect(()=>{
+
+    callApi()
+
+  },[])
+  return(
+    <>
+    <div className="container">
+      {data.map(user=>
+        <div className="card">
+          <h5 className='title'>{user.title}</h5>
+          <img src={user.image} className='imgage' height={'200px'} width={'180px'}/>
+          <h7 className="category">Category:{user.category}</h7>
+          <p className='price'>Price:{user.price}</p>
+          <p className='description'>Description:{user.description}</p>
+          <p className='rating'>Rating:{user.rating.rate}</p>
+          <p className='count'>Rating Count:{user.rating.count}</p>
+        </div>
+      )}
     </div>
-  );
+    </>
+  )
 }
 
 export default App
